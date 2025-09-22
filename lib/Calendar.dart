@@ -7,7 +7,7 @@ class Calendar {
   final File file = File('data/events.csv');
   
   Calendar() {
-    loadFile();
+  loadFile();
   }
   void loadFile() async {
     var lines = await file.readAsLines();
@@ -19,14 +19,29 @@ class Calendar {
     }
   }
 
-  void saveFile() async {
-    List<List<dynamic>> rows = [];
-    for (var event in events) {
-      rows.add(event.toCsvRow());
-    }
-    String csv = const ListToCsvConverter().convert(rows);
-    await file.writeAsString(csv);
+  Future<void> saveFile() async {
+  List<List<dynamic>> rows = [];
+
+  for (var event in events) {
+    rows.add(event.toCsvRow());
   }
+
+  String csv = const ListToCsvConverter().convert(rows);
+
+  // Ensure folder exists
+  if (!await file.parent.exists()) {
+    await file.parent.create(recursive: true);
+  }
+
+  // Create file if missing
+  if (!await file.exists()) {
+    await file.create(); //
+  }
+
+  await file.writeAsString(csv);
+  print("File saved.");
+}
+
 
   void addEvent(Event event) {
     events.add(event);
