@@ -5,7 +5,6 @@ import 'GoalManager.dart';
 
 /// The Calendar class manages a collection of Event objects,
 /// organized by their date (day-level granularity).
-/// 
 
 class Calendar {
   /// Stores all events, grouped by their date (ignoring the time portion).
